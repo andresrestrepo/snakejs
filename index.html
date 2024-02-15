@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Snake.js</title>
+</head>
+
+<body>
+  <div id="app">
+    <h1 style="float: left;"> Crazy Snake</h1>
+    <img src="snake.png" width="200"> </img><br>
+    <canvas id="tutorial" width="600" height="800"></canvas>
+
+
+    <div class="keyboard">
+      <!-- Top Row -->
+      <div class="top-row">
+        <!-- Key -->
+        <div data-key="87" class="key" id="btn_up">
+          <!-- Character -->
+          <p>&#8593;</p>
+
+        </div>
+      </div>
+      <!-- Bottom Row -->
+      <div class="bottom-row">
+        <!-- Key -->
+        <div data-key="65" class="key" id="btn_left">
+          <!-- Character -->
+          <p>&#8592;</p>
+        </div>
+        <!-- Key -->
+        <div data-key="83" class="key" id="btn_down">
+          <!-- Character -->
+          <p>&#8595;</p>
+        </div>
+        <!-- Key -->
+        <div data-key="68" class="key" id="btn_right">
+          <!-- Character -->
+          <p>&#8594;</p>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div>Score:</div><span id="score"></span>
+  </div>
+  <script type="module" src="/main.js"></script>
+</body>
+
+</html>

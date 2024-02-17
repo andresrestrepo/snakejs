@@ -1,5 +1,6 @@
 import './style.css'
 import './modal.css'
+import './celebration.css'
 import { startTime, endTime } from './time'
 import MicroModal from 'micromodal';
 
@@ -18,6 +19,9 @@ ctx.scale(BLOCK_SIZE, BLOCK_SIZE)
 
 const SCORE_HISTORY = []
 let firstTime = false;
+let time = 150
+let intervalTime
+
 
 function isMobile() {
   let check = false;
@@ -115,6 +119,10 @@ function paintTableScoreHistory() {
 }
 
 function reset() {
+  clearInterval(intervalTime)
+  time = 150
+  intervalTime = window.setInterval(run, time)
+
   paintTableScoreHistory()
   const audio = new Audio('game-over.wav')
   audio.play()
@@ -129,9 +137,20 @@ function reset() {
 
 function playHitBoxAudio() {
   const audio = new Audio('get-box.wav')
+
+  if (score % 2 === 0){
+    clearInterval(intervalTime)
+    time -=4
+    intervalTime = window.setInterval(run, time)
+  }
+
   if (score % 10 === 0) {
     const audio2 = new Audio('very-good.wav')
     audio2.play()
+    document.getElementsByClassName('confetti')[0].style.visibility = 'visible'
+    setTimeout(() => {
+      document.getElementsByClassName('confetti')[0].style.visibility = 'hidden'
+    }, 8000)
   }
   audio.play()
 }
@@ -140,98 +159,98 @@ function checkColition(positionx, positiony) {
   return board[positionx][positiony] === 1 || board[positionx][positiony] === 2
 }
 
+function run(){
+  drawBoard(board)
+
+  if (direction !== 'none' && firstTime === false) {
+    firstTime = true
+    startTime()
+  }
+
+  if (direction === 'right') {
+    const [headPosition, tailPosition] = calculatePositionSnake()
+
+    if (headPosition[1] + 1 > WIDTH_BOARD || checkColition(headPosition[0], headPosition[1] + 1)) {
+      reset()
+    } else {
+      board[tailPosition[0]][tailPosition[1]] = 0
+      if (board[headPosition[0]][headPosition[1] + 1] === 4) {
+        board[headPosition[0]][headPosition[1]] = 1
+        board[headPosition[0]][headPosition[1] + 1] = 1
+        board[headPosition[0]][headPosition[1] + 2] = 3
+        newBox(board)
+        playHitBoxAudio()
+      } else {
+        board[headPosition[0]][headPosition[1]] = 1
+        board[headPosition[0]][headPosition[1] + 1] = 3
+      }
+    }
+  }
+  if (direction === 'left') {
+    const [headPosition, tailPosition] = calculatePositionSnake()
+
+    if (headPosition[1] - 1 < 0 || checkColition(headPosition[0], headPosition[1] - 1)) {
+      reset()
+    } else {
+      board[tailPosition[0]][tailPosition[1]] = 0
+
+      if (board[headPosition[0]][headPosition[1] - 1] === 4) {
+        board[headPosition[0]][headPosition[1]] = 1
+        board[headPosition[0]][headPosition[1] - 1] = 3
+        board[headPosition[0]][headPosition[1] - 2] = 3
+        newBox(board)
+        playHitBoxAudio()
+      } else {
+        board[headPosition[0]][headPosition[1]] = 1
+        board[headPosition[0]][headPosition[1] - 1] = 3
+      }
+    }
+  }
+
+  if (direction === 'up') {
+    const [headPosition, tailPosition] = calculatePositionSnake()
+
+    if (headPosition[0] - 1 < 0 || checkColition(headPosition[0] - 1, headPosition[1])) {
+      reset()
+    } else {
+      board[tailPosition[0]][tailPosition[1]] = 0
+
+      if (board[headPosition[0] - 1][headPosition[1]] === 4) {
+        board[headPosition[0]][headPosition[1]] = 1
+        board[headPosition[0] - 1][headPosition[1]] = 1
+        board[headPosition[0] - 2][headPosition[1]] = 3
+        newBox(board)
+        playHitBoxAudio()
+      } else {
+        board[headPosition[0]][headPosition[1]] = 1
+        board[headPosition[0] - 1][headPosition[1]] = 3
+      }
+    }
+  }
+  if (direction === 'down') {
+    const [headPosition, tailPosition] = calculatePositionSnake()
+
+    if (headPosition[0] + 1 > HEIGHT_BOARD || checkColition(headPosition[0] + 1, headPosition[1])) {
+      reset()
+    } else {
+      board[tailPosition[0]][tailPosition[1]] = 0
+
+      if (board[headPosition[0] + 1][headPosition[1]] === 4) {
+        board[headPosition[0]][headPosition[1]] = 1
+        board[headPosition[0] + 1][headPosition[1]] = 1
+        board[headPosition[0] + 2][headPosition[1]] = 3
+        newBox(board)
+        playHitBoxAudio()
+      } else {
+        board[headPosition[0]][headPosition[1]] = 1
+        board[headPosition[0] + 1][headPosition[1]] = 3
+      }
+    }
+  }
+}
+
 function draw() {
-  window.setInterval(() => {
-    drawBoard(board)
-
-    if (direction !== 'none' && firstTime === false) {
-      firstTime = true
-      startTime()
-    }
-
-    if (direction === 'right') {
-      const [headPosition, tailPosition] = calculatePositionSnake()
-
-      if (headPosition[1] + 1 > WIDTH_BOARD || checkColition(headPosition[0], headPosition[1] + 1)) {
-        reset()
-      } else {
-        board[tailPosition[0]][tailPosition[1]] = 0
-        if (board[headPosition[0]][headPosition[1] + 1] === 4) {
-          board[headPosition[0]][headPosition[1]] = 1
-          board[headPosition[0]][headPosition[1] + 1] = 1
-          board[headPosition[0]][headPosition[1] + 2] = 3
-          newBox(board)
-          playHitBoxAudio()
-        } else {
-          board[headPosition[0]][headPosition[1]] = 1
-          board[headPosition[0]][headPosition[1] + 1] = 3
-        }
-      }
-    }
-    if (direction === 'left') {
-      const [headPosition, tailPosition] = calculatePositionSnake()
-
-      if (headPosition[1] - 1 < 0 || checkColition(headPosition[0], headPosition[1] - 1)) {
-        reset()
-      } else {
-        board[tailPosition[0]][tailPosition[1]] = 0
-
-        if (board[headPosition[0]][headPosition[1] - 1] === 4) {
-          board[headPosition[0]][headPosition[1]] = 1
-          board[headPosition[0]][headPosition[1] - 1] = 3
-          board[headPosition[0]][headPosition[1] - 2] = 3
-          newBox(board)
-          playHitBoxAudio()
-        } else {
-          board[headPosition[0]][headPosition[1]] = 1
-          board[headPosition[0]][headPosition[1] - 1] = 3
-        }
-      }
-    }
-
-    if (direction === 'up') {
-      const [headPosition, tailPosition] = calculatePositionSnake()
-
-      if (headPosition[0] - 1 < 0 || checkColition(headPosition[0] - 1, headPosition[1])) {
-        reset()
-      } else {
-        board[tailPosition[0]][tailPosition[1]] = 0
-
-        if (board[headPosition[0] - 1][headPosition[1]] === 4) {
-          board[headPosition[0]][headPosition[1]] = 1
-          board[headPosition[0] - 1][headPosition[1]] = 1
-          board[headPosition[0] - 2][headPosition[1]] = 3
-          newBox(board)
-          playHitBoxAudio()
-        } else {
-          board[headPosition[0]][headPosition[1]] = 1
-          board[headPosition[0] - 1][headPosition[1]] = 3
-        }
-      }
-    }
-    if (direction === 'down') {
-      const [headPosition, tailPosition] = calculatePositionSnake()
-
-      if (headPosition[0] + 1 > HEIGHT_BOARD || checkColition(headPosition[0] + 1, headPosition[1])) {
-        reset()
-      } else {
-        board[tailPosition[0]][tailPosition[1]] = 0
-
-        if (board[headPosition[0] + 1][headPosition[1]] === 4) {
-          board[headPosition[0]][headPosition[1]] = 1
-          board[headPosition[0] + 1][headPosition[1]] = 1
-          board[headPosition[0] + 2][headPosition[1]] = 3
-          newBox(board)
-          playHitBoxAudio()
-        } else {
-          board[headPosition[0]][headPosition[1]] = 1
-          board[headPosition[0] + 1][headPosition[1]] = 3
-        }
-      }
-    }
-
-
-  }, 200)
+  intervalTime = window.setInterval(run, time)
 }
 
 function calculatePositionSnake() {

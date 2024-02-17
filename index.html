@@ -4,21 +4,28 @@
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/snakejs/vite.svg" />
-  <meta name="viewport" content="width=device-width">
+  <meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=1, user-scalable=0">
   <title>Snake.js</title>
-  <script type="module" crossorigin src="/snakejs/assets/index-BbIuf2or.js"></script>
-  <link rel="stylesheet" crossorigin href="/snakejs/assets/index-Bh_viaKE.css">
+  <script type="module" crossorigin src="/snakejs/assets/index-CXjx31_3.js"></script>
+  <link rel="stylesheet" crossorigin href="/snakejs/assets/index-CEAyItye.css">
 </head>
 
 <body>
   <div id="app">
-    <h1 style="float: left;"> Crazy Snake</h1>
-    <div>On Desktop use key &#8593;,&#8592;,&#8595;,&#8594;
-    <img src="/snakejs/assets/snake-C8pzDHwh.png" width="200"> </img><br>
+
+    <h1> Crazy Snake
+      <img src="/snakejs/assets/snake-C8pzDHwh.png" width="100"> </img>
+    </h1>
+
+
+    <div style="clear: both;margin: 10px;">
+      <button data-micromodal-trigger="modal-1">[Score History] <span id="score"></span>
+      </button>
+    </div>
     <canvas id="tutorial" width="600" height="800"></canvas>
-
-
-    <div class="keyboard">
+    <div id="desktop-keys">Use keys <span>&#8593;,&#8592;,&#8595;,&#8594;</span></div>
+    
+    <div class="keyboard disable-dbl-tap-zoom">
       <!-- Top Row -->
       <div class="top-row">
         <!-- Key -->
@@ -47,11 +54,47 @@
         </div>
       </div>
     </div>
-
-
-
-    <div>Score:</div><span id="score"></span>
   </div>
+
+  <div class="modal micromodal-slide" id="modal-1" aria-hidden="true">
+    <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+      <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
+        <header class="modal__header">
+          <h2 class="modal__title" id="modal-1-title">
+            Score History
+          </h2>
+          <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
+        </header>
+        <main class="modal__content" id="modal-1-content">
+          <table id="tbl_score_history">
+            <tr>
+              <th>Score</th>
+              <th>Time</th>
+            </tr>
+
+          </table>
+        </main>
+        <footer class="modal__footer">
+        </footer>
+      </div>
+    </div>
+  </div>
+  <div class="confetti">
+    <div class="confetti-piece"></div>
+    <div class="confetti-piece"></div>
+    <div class="confetti-piece"></div>
+    <div class="confetti-piece"></div>
+    <div class="confetti-piece"></div>
+    <div class="confetti-piece"></div>
+    <div class="confetti-piece"></div>
+    <div class="confetti-piece"></div>
+    <div class="confetti-piece"></div>
+    <div class="confetti-piece"></div>
+    <div class="confetti-piece"></div>
+    <div class="confetti-piece"></div>
+    <div class="confetti-piece"></div>
+  </div>
+
 </body>
 
 </html>

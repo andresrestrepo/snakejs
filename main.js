@@ -21,7 +21,7 @@ const SCORE_HISTORY = []
 let firstTime = false;
 let time = 150
 let intervalTime
-
+let validationMultipleTails = true
 
 function isMobile() {
   let check = false;
@@ -159,6 +159,16 @@ function checkColition(positionx, positiony) {
   return board[positionx][positiony] === 1 || board[positionx][positiony] === 2
 }
 
+function existsMultipleTails(){
+  let tails = 0
+  board.forEach((row, y) => {
+    let tailsInRow = row.filter((value) => value === 2)
+    tails += tailsInRow.length
+  })
+
+  return tails > 1
+}
+
 function run(){
   drawBoard(board)
 
@@ -196,7 +206,7 @@ function run(){
 
       if (board[headPosition[0]][headPosition[1] - 1] === 4) {
         board[headPosition[0]][headPosition[1]] = 1
-        board[headPosition[0]][headPosition[1] - 1] = 3
+        board[headPosition[0]][headPosition[1] - 1] = 1
         board[headPosition[0]][headPosition[1] - 2] = 3
         newBox(board)
         playHitBoxAudio()
@@ -246,6 +256,16 @@ function run(){
         board[headPosition[0] + 1][headPosition[1]] = 3
       }
     }
+  }
+
+  if (existsMultipleTails()){
+    if (validationMultipleTails){
+      validationMultipleTails = false
+      const audio = new Audio('sword.wav')
+      audio.play()
+    }
+  }else{
+    validationMultipleTails = true
   }
 }
 

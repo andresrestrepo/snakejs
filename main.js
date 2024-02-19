@@ -138,7 +138,7 @@ function reset() {
 function playHitBoxAudio() {
   const audio = new Audio('get-box.wav')
 
-  if (score % 2 === 0){
+  if (score % 2 === 0 && time > 50){
     clearInterval(intervalTime)
     time -=4
     intervalTime = window.setInterval(run, time)
